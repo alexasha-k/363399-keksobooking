@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Alexandra Kudryavtseva](https://up.htmlacademy.ru/javascript/12/user/363399).
-* Наставник: `Неизвестно`.
+* Наставник: [Alexander Smirnov](https://htmlacademy.ru/profile/id516117).
 
 ---
 
