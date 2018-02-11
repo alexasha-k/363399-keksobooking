@@ -39,10 +39,6 @@ var offerTypeRU = function () {
   }
 };
 
-//  Создаем пустой массив
-var mapObjects = [];
-
-
 //  Получение случайного числа
 var getRandomNumber = function (min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
@@ -50,12 +46,12 @@ var getRandomNumber = function (min, max) {
 
 //  Получение случайного элемента из массива
 var getRandomItem = function (arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
+  return arr[getRandomNumber(0, arr.length - 1)];
 };
 
 //  Получение случайного элемента из массива без повторения
 var getRandomItemNoRepeat = function (arr) {
-  var randomElement = Math.floor(Math.random() * arr.length);
+  var randomElement = getRandomNumber(0, arr.length - 1);
   var randomElementItem = arr[randomElement];
   arr.splice(randomElement, 1);
   return randomElementItem;
@@ -67,7 +63,7 @@ var getRandomItemNoRepeatAll = function (arr, num) {
   var newArr = [];
   var myArr = arr.slice();
   for (var i = 0; i < num; i++) {
-    var random = Math.floor(Math.random() * myArr.length);
+    var random = getRandomNumber(0, myArr.length - 1);
     newArr.push(myArr[random]);
     myArr.splice(random, 1);
   }
@@ -80,7 +76,7 @@ var shuffleArr = function (arr) {
   var myArr = arr.slice();
   var num = myArr.length;
   for (var i = 0; i < num; i++) {
-    var random = Math.floor(Math.random() * myArr.length);
+    var random = getRandomNumber(0, myArr.length - 1);
     newArr.push(myArr[random]);
     myArr.splice(random, 1);
   }
@@ -89,6 +85,7 @@ var shuffleArr = function (arr) {
 
 //  Получение массива
 var getObjects = function (num) {
+  var arr = [];
   for (var i = 0; i < num; i++) {
 
     var locationX = getRandomNumber(300, 900);
@@ -118,12 +115,13 @@ var getObjects = function (num) {
       }
     };
 
-    mapObjects.push(mapObject);
+    arr.push(mapObject);
   }
+  return arr;
 };
 
 //  Получаем массив из 8 элементов для задания
-getObjects(8);
+var mapObjects = getObjects(8);
 
 //  END Создайте массив, состоящий из 8 сгенерированных JS объектов
 
