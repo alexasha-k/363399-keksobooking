@@ -2,7 +2,6 @@
 
 //  Временное решение. У блока .map уберите класс .map--faded
 
-document.querySelector('.map').classList.remove('map--faded');
 
 //  Создайте массив, состоящий из 8 сгенерированных JS объектов
 
@@ -30,8 +29,8 @@ var OFFER_PHOTOS = [
 ];
 
 //  Перевод для вывода типа объектов
-var offerTypeRU = function () {
-  switch (mapObjects[i].offer.type) {
+var offerTypeRU = function (el) {
+  switch (el) {
     case 'flat': return 'Квартира';
     case 'bungalo': return 'Бунгало';
     case 'house': return 'Дом';
@@ -132,63 +131,166 @@ var createDOMElement = function (el) {
   return el.content;
 };
 
-var mapPins = document.querySelector('.map__pins');
 var map = document.querySelector('section.map');
 
 //  Заполнение меток данными из массива
 var mapBalloonTemplate = createDOMElement(document.querySelector('#map-balloon-template'));
 var PIN_HEIGHT = 70;
 
-for (var i = 0; i < mapObjects.length; i++) {
-
-  var mapBalloonElement = mapBalloonTemplate.cloneNode(true);
-  mapBalloonElement.querySelector('.map__pin').style.left = mapObjects[i].location.x + 'px';
-  mapBalloonElement.querySelector('.map__pin').style.top = (mapObjects[i].location.y - (PIN_HEIGHT / 2)) + 'px';
-  mapBalloonElement.querySelector('.map__pin').setAttribute('title', 'My title');
-  mapBalloonElement.querySelector('img').setAttribute('src', mapObjects[i].author.avatar);
-
-  mapPins.appendChild(mapBalloonElement);
-}
-
 //  Заполнение объявления данными из массива
 
-var mapCardTemplate = createDOMElement(document.querySelector('#map-card-template'));
-var mapFiltersContainer = document.querySelector('.map__filters-container');
+var showCard = function (obj) {
+  var mapCardElement = createDOMElement(document.querySelector('#map-card-template')).querySelector('.map__card').cloneNode(true);
+  mapCardElement.querySelector('h3').textContent = obj.offer.title;
+  mapCardElement.querySelector('p > small').textContent = obj.offer.address;
+  mapCardElement.querySelector('.popup__price').textContent = obj.offer.price + ' \u20BD /ночь';
+  mapCardElement.querySelector('h4').textContent = offerTypeRU(obj.offer.type);
+  mapCardElement.querySelector('h4 + p').textContent = obj.offer.rooms + ' комнаты для ' + obj.offer.guests + ' гостей';
+  mapCardElement.querySelector('h4 + p + p').textContent = 'Заезд после ' + obj.offer.checkin + ', выезд до ' + obj.offer.checkout;
+  mapCardElement.querySelector('.popup__avatar').setAttribute('src', obj.author.avatar);
+  mapCardElement.querySelector('.popup__features + p').textContent = obj.offer.description;
 
-for (i = 0; i < mapObjects.length; i++) {
-
-  var mapCardElement = mapCardTemplate.cloneNode(true);
-  mapCardElement.querySelector('h3').textContent = mapObjects[i].offer.title;
-  mapCardElement.querySelector('p > small').textContent = mapObjects[i].offer.address;
-  mapCardElement.querySelector('.popup__price').textContent = mapObjects[i].offer.price + ' \u20BD /ночь';
-  mapCardElement.querySelector('h4').textContent = offerTypeRU();
-  mapCardElement.querySelector('h4 + p').textContent = mapObjects[i].offer.rooms + ' комнаты для ' + mapObjects[i].offer.guests + ' гостей';
-  mapCardElement.querySelector('h4 + p + p').textContent = 'Заезд после ' + mapObjects[i].offer.checkin + ', выезд до ' + mapObjects[i].offer.checkout;
-  mapCardElement.querySelector('.popup__features + p').textContent = mapObjects[i].offer.description;
-  mapCardElement.querySelector('.popup__avatar').setAttribute('src', mapObjects[i].author.avatar);
-  mapCardElement.querySelector('.popup__features + p').textContent = mapObjects[i].offer.description;
-
-  //  Заполнение блока features
-  var mapCardElementFeature = mapCardElement.querySelector('.popup__features li');
-
-  for (var j = 0; j < mapObjects[i].offer.features.length; j++) {
-    var mapCardElementFeatureElement = mapCardElementFeature.cloneNode(true);
-    mapCardElementFeatureElement.classList.add('feature', 'feature--' + mapObjects[i].offer.features[j]);
-    mapCardElement.querySelector('.popup__features').appendChild(mapCardElementFeatureElement);
+  var oldFeatures = mapCardElement.querySelector('.popup__features');
+  var newFeatures = oldFeatures.cloneNode();
+  for (var i = 0; i < obj.offer.features.length; i++) {
+    var liElementFeatures = document.createElement('li');
+    liElementFeatures.className = 'feature feature--' + obj.offer.features[i];
+    newFeatures.appendChild(liElementFeatures);
   }
 
-  //  Заполнение блока pictures
-  var mapCardElementPictures = mapCardElement.querySelector('.popup__pictures li');
+  mapCardElement.replaceChild(newFeatures, oldFeatures);
 
-  for (var k = 0; k < mapObjects[i].offer.photos.length; k++) {
-    var mapCardElementPictureElement = mapCardElementPictures.cloneNode(true);
-    mapCardElementPictureElement.querySelector('img').setAttribute('src', mapObjects[i].offer.photos[k]);
-    mapCardElementPictureElement.querySelector('img').setAttribute('width', 100);
-    mapCardElementPictureElement.querySelector('img').setAttribute('height', 75);
-    mapCardElement.querySelector('.popup__pictures').appendChild(mapCardElementPictureElement);
+  var oldPictures = mapCardElement.querySelector('.popup__pictures');
+  var newPictures = oldPictures.cloneNode();
+
+
+  for (var k = 0; k < obj.offer.photos.length; k++) {
+    var liElementPhotos = document.createElement('li');
+    var imageElement = document.createElement('img');
+    imageElement.src = obj.offer.photos[k];
+    imageElement.width = 100;
+    imageElement.height = 75;
+    liElementPhotos.appendChild(imageElement);
+    newPictures.appendChild(liElementPhotos);
   }
+  mapCardElement.replaceChild(newPictures, oldPictures);
+  map.appendChild(mapCardElement);
+  mapCardElement.querySelector('.popup__close').addEventListener('click', removeCard);
 
-  map.insertBefore(mapCardElement, mapFiltersContainer);
-}
+};
+
+var disableActivePin = function () {
+  var activePin = document.querySelector('.map__pin--active');
+  if (activePin) {
+    activePin.classList.remove('map__pin--active');
+  }
+};
+var removeCard = function () {
+  var oldCard = map.querySelector('.popup');
+  if (oldCard) {
+    map.removeChild(oldCard);
+  }
+};
+
+
+var onEscKeydown = function (evt) {
+  if (evt.keyCode === 27) {
+    removeCard();
+    disableActivePin();
+    document.removeEventListener('keydown', onEscKeydown);
+  }
+};
+
+var onClickPin = function (obj) {
+
+  return function (evt) {
+    var target = evt.currentTarget;
+    disableActivePin();
+    target.classList.add('map__pin--active');
+    removeCard();
+    showCard(obj);
+    document.addEventListener('keydown', onEscKeydown);
+  };
+};
+
+var getPinElement = function (obj) {
+  var mapBalloonElement = mapBalloonTemplate.querySelector('.map__pin').cloneNode(true);
+  mapBalloonElement.style.left = obj.location.x + 'px';
+  mapBalloonElement.style.top = (obj.location.y - (PIN_HEIGHT / 2)) + 'px';
+  mapBalloonElement.title = 'My title';
+  mapBalloonElement.querySelector('img').src = obj.author.avatar;
+
+  mapBalloonElement.addEventListener('click', onClickPin(obj));
+
+  return mapBalloonElement;
+};
 
 //  END На основе данных, созданных в первом пункте, создайте DOM-элементы, соответствующие меткам на карте
+
+var noticeForm = document.querySelector('.notice__form');
+var formElementInput = document.querySelectorAll('.notice__form input');
+var formElementTextarea = document.querySelectorAll('.notice__form textarea');
+var formElementSelect = document.querySelectorAll('.notice__form select');
+var formElementButton = document.querySelectorAll('.notice__form button');
+
+var mapPinMain = document.querySelector('.map__pin--main');
+
+//  Делаем из выбранных ДОМ элементов массив
+var nodeListToArray = function (myNodeList) {
+  var arr = [];
+  for (var i = 0; i < myNodeList.length; i++) {
+    var item = myNodeList[i];
+    arr.push(item);
+  }
+  return arr;
+};
+
+//  Объединяем несколько выбранных групп элементов в массив
+var getArrOfFormElement = function () {
+  var myArr = [];
+  for (var i = 0; i < arguments.length; i++) {
+    var nodeListArr = nodeListToArray(arguments[i]);
+    myArr = myArr.concat(nodeListArr);
+  }
+  return myArr;
+};
+
+//  Получаем все элементы, которые надо активировать/дезактивировать
+var ArrOfFormElement = getArrOfFormElement(formElementInput, formElementTextarea, formElementSelect, formElementButton);
+
+//  Функция переключения элементов форм из неактивного состояния в активное и обратно
+var toggleDisableElement = function (arr, state) {
+  var i;
+  if (state) {
+    for (i = 0; i < arr.length; i++) {
+      arr[i].disabled = true;
+    }
+  } else {
+    for (i = 0; i < arr.length; i++) {
+      arr[i].disabled = false;
+    }
+  }
+};
+
+//  Выключаем все элементы формы при первом запуске
+toggleDisableElement(ArrOfFormElement, true);
+
+var noticeFormAddress = document.querySelector('#address');
+noticeFormAddress.value = '375, ' + window.outerWidth / 2;
+
+var renderPins = function (arr) {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < arr.length; i++) {
+    var pinElement = getPinElement(arr[i]);
+    fragment.appendChild(pinElement);
+  }
+  document.querySelector('.map__pins').appendChild(fragment);
+};
+
+mapPinMain.addEventListener('mouseup', function () {
+  map.classList.remove('map--faded');
+  noticeForm.classList.remove('notice__form--disabled');
+  toggleDisableElement(ArrOfFormElement);
+  noticeFormAddress.value = '429.5, ' + window.outerWidth / 2;
+  renderPins(mapObjects);
+});
