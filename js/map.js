@@ -1,8 +1,5 @@
 'use strict';
 
-//  Временное решение. У блока .map уберите класс .map--faded
-
-
 //  Создайте массив, состоящий из 8 сгенерированных JS объектов
 
 //  Константы для создания массива
@@ -228,52 +225,25 @@ var getPinElement = function (obj) {
 //  END На основе данных, созданных в первом пункте, создайте DOM-элементы, соответствующие меткам на карте
 
 var noticeForm = document.querySelector('.notice__form');
-var formElementInput = document.querySelectorAll('.notice__form input');
-var formElementTextarea = document.querySelectorAll('.notice__form textarea');
-var formElementSelect = document.querySelectorAll('.notice__form select');
-var formElementButton = document.querySelectorAll('.notice__form button');
-
 var mapPinMain = document.querySelector('.map__pin--main');
 
-//  Делаем из выбранных ДОМ элементов массив
-var nodeListToArray = function (myNodeList) {
-  var arr = [];
-  for (var i = 0; i < myNodeList.length; i++) {
-    var item = myNodeList[i];
-    arr.push(item);
-  }
-  return arr;
-};
-
-//  Объединяем несколько выбранных групп элементов в массив
-var getArrOfFormElement = function () {
-  var myArr = [];
-  for (var i = 0; i < arguments.length; i++) {
-    var nodeListArr = nodeListToArray(arguments[i]);
-    myArr = myArr.concat(nodeListArr);
-  }
-  return myArr;
-};
-
-//  Получаем все элементы, которые надо активировать/дезактивировать
-var ArrOfFormElement = getArrOfFormElement(formElementInput, formElementTextarea, formElementSelect, formElementButton);
-
 //  Функция переключения элементов форм из неактивного состояния в активное и обратно
-var toggleDisableElement = function (arr, state) {
+var toggleDisableElement = function (state) {
+  var allFieldSets = document.querySelectorAll('fieldset');
   var i;
   if (state) {
-    for (i = 0; i < arr.length; i++) {
-      arr[i].disabled = true;
+    for (i = 0; i < allFieldSets.length; i++) {
+      allFieldSets[i].disabled = true;
     }
   } else {
-    for (i = 0; i < arr.length; i++) {
-      arr[i].disabled = false;
+    for (i = 0; i < allFieldSets.length; i++) {
+      allFieldSets[i].disabled = false;
     }
   }
 };
 
 //  Выключаем все элементы формы при первом запуске
-toggleDisableElement(ArrOfFormElement, true);
+toggleDisableElement(true);
 
 var noticeFormAddress = document.querySelector('#address');
 noticeFormAddress.value = '375, ' + window.outerWidth / 2;
@@ -290,7 +260,7 @@ var renderPins = function (arr) {
 mapPinMain.addEventListener('mouseup', function () {
   map.classList.remove('map--faded');
   noticeForm.classList.remove('notice__form--disabled');
-  toggleDisableElement(ArrOfFormElement);
+  toggleDisableElement();
   noticeFormAddress.value = '429.5, ' + window.outerWidth / 2;
   renderPins(mapObjects);
 });
