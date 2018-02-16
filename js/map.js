@@ -230,15 +230,8 @@ var mapPinMain = document.querySelector('.map__pin--main');
 //  Функция переключения элементов форм из неактивного состояния в активное и обратно
 var toggleDisableElement = function (state) {
   var allFieldSets = document.querySelectorAll('fieldset');
-  var i;
-  if (state) {
-    for (i = 0; i < allFieldSets.length; i++) {
-      allFieldSets[i].disabled = true;
-    }
-  } else {
-    for (i = 0; i < allFieldSets.length; i++) {
-      allFieldSets[i].disabled = false;
-    }
+  for (var i = 0; i < allFieldSets.length; i++) {
+    allFieldSets[i].disabled = state;
   }
 };
 
