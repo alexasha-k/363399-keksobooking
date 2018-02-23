@@ -5,6 +5,8 @@
 (function () {
   //  Форма отправки данных
 
+  var noticeForm = document.querySelector('.notice__form');
+  var noticeFormAddress = document.querySelector('.form__element #address');
   var formElementTitle = document.querySelector('.form__element #title');
   var formElementType = document.querySelector('.form__element #type');
   var formElementPrice = document.querySelector('.form__element #price');
@@ -12,6 +14,7 @@
   var formElementTimeout = document.querySelector('.form__element #timeout');
   var formElementRoomNumber = document.querySelector('.form__element #room_number');
   var formElementCapacity = document.querySelector('.form__element #capacity');
+  var mapPinMain = document.querySelector('.map__pin--main');
   var minLengthValue = formElementTitle.minLength;
 
   //  Валидация минимальный длины заголовка объявления для Edge
@@ -88,5 +91,15 @@
 
   formElementCapacity.addEventListener('input', setRoomNumberCapacityValidity);
   formElementRoomNumber.addEventListener('input', setRoomNumberCapacityValidity);
+
+  //  Кнопка сброса полей формы и возврата метки в первоначальное состояние
+  var resetButton = document.querySelector('.form__reset');
+  resetButton.addEventListener('click', function (evt) {
+    evt.preventDefault();
+    noticeForm.reset();
+    noticeFormAddress.value = '429.5, ' + window.outerWidth / 2;
+    mapPinMain.style.top = 375 + 'px';
+    mapPinMain.style.left = 50 + '%';
+  });
 
 })();
