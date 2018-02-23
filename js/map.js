@@ -58,7 +58,6 @@
     mapPinMain.removeEventListener('mousemove', startMap);
   };
 
-
   //  Обработчики mousemove и mouseup должны добавляться только при вызове обработчика mousedown
   mapPinMain.addEventListener('mousedown', function (evt) {
     if (map.classList.contains('map--faded')) {
