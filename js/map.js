@@ -58,9 +58,7 @@
   var startMap = function () {
     window.mapObjects = [];
     window.load(function (data) {
-      var mapNotices = [];
-      mapNotices = data;
-      window.mapObjects = mapNotices;
+      window.mapObjects = data;
       window.renderPins(window.mapObjects, 5);
       for (i = 0; i < mapFiltersSelects.length; i++) {
         mapFiltersSelects[i].disabled = false;

@@ -100,6 +100,8 @@
   });
 
   noticeForm.addEventListener('submit', function (evt) {
+    var body = document.querySelector('body');
+
     window.upload(new FormData(noticeForm), function () {
       noticeForm.reset();
       window.clearPins();
@@ -107,8 +109,16 @@
 
       var responseMessage = document.createElement('div');
       responseMessage.classList.add('response-message');
-      responseMessage.textContent = 'Вы успешно отправили объявление на сервер';
-      var body = document.querySelector('body');
+      responseMessage.textContent = 'Вы успешно отправили объявление';
+      body.appendChild(responseMessage);
+      setTimeout(function () {
+        body.removeChild(responseMessage);
+      }, 3000);
+
+    }, function (response) {
+      var responseMessage = document.createElement('div');
+      responseMessage.classList.add('response-message');
+      responseMessage.textContent = 'Ваше объявление не было отправлено(' + response + ')';
       body.appendChild(responseMessage);
       setTimeout(function () {
         body.removeChild(responseMessage);
