@@ -6,7 +6,6 @@
   //  Форма отправки данных
 
   var noticeForm = document.querySelector('.notice__form');
-  var noticeFormAddress = document.querySelector('.form__element #address');
   var formElementTitle = document.querySelector('.form__element #title');
   var formElementType = document.querySelector('.form__element #type');
   var formElementPrice = document.querySelector('.form__element #price');
@@ -14,7 +13,6 @@
   var formElementTimeout = document.querySelector('.form__element #timeout');
   var formElementRoomNumber = document.querySelector('.form__element #room_number');
   var formElementCapacity = document.querySelector('.form__element #capacity');
-  var mapPinMain = document.querySelector('.map__pin--main');
   var minLengthValue = formElementTitle.minLength;
 
   //  Валидация минимальный длины заголовка объявления для Edge
@@ -28,7 +26,7 @@
   });
 
   //  Установить минимальную цену в зависимости от типа помещения
-  formElementType.addEventListener('input', function (evt) {
+  formElementType.addEventListener('change', function (evt) {
     var target = evt.target;
     switch (target.value) {
       case 'bungalo':
@@ -59,11 +57,11 @@
   });
 
   //  Чтобы время заезда и выезда были одинаковыми
-  formElementTimein.addEventListener('input', function () {
+  formElementTimein.addEventListener('change', function () {
     formElementTimeout.value = formElementTimein.value;
   });
 
-  formElementTimeout.addEventListener('input', function () {
+  formElementTimeout.addEventListener('change', function () {
     formElementTimein.value = formElementTimeout.value;
   });
 
@@ -89,17 +87,34 @@
     }
   };
 
-  formElementCapacity.addEventListener('input', setRoomNumberCapacityValidity);
-  formElementRoomNumber.addEventListener('input', setRoomNumberCapacityValidity);
+  formElementCapacity.addEventListener('change', setRoomNumberCapacityValidity);
+  formElementRoomNumber.addEventListener('change', setRoomNumberCapacityValidity);
 
   //  Кнопка сброса полей формы и возврата метки в первоначальное состояние
   var resetButton = document.querySelector('.form__reset');
   resetButton.addEventListener('click', function (evt) {
     evt.preventDefault();
     noticeForm.reset();
-    noticeFormAddress.value = '429.5, ' + window.outerWidth / 2;
-    mapPinMain.style.top = 375 + 'px';
-    mapPinMain.style.left = 50 + '%';
+    window.clearPins();
+    window.closeMap();
+  });
+
+  noticeForm.addEventListener('submit', function (evt) {
+    window.upload(new FormData(noticeForm), function () {
+      noticeForm.reset();
+      window.clearPins();
+      window.closeMap();
+
+      var responseMessage = document.createElement('div');
+      responseMessage.classList.add('response-message');
+      responseMessage.textContent = 'Вы успешно отправили объявление на сервер';
+      var body = document.querySelector('body');
+      body.appendChild(responseMessage);
+      setTimeout(function () {
+        body.removeChild(responseMessage);
+      }, 3000);
+    });
+    evt.preventDefault();
   });
 
 })();
