@@ -34,8 +34,8 @@
       var liElementPhotos = document.createElement('li');
       var imageElement = document.createElement('img');
       imageElement.src = obj.offer.photos[k];
-      imageElement.width = 100;
-      imageElement.height = 75;
+      imageElement.width = 66.66;
+      imageElement.height = 50;
       liElementPhotos.appendChild(imageElement);
       newPictures.appendChild(liElementPhotos);
     }
