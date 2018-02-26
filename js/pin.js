@@ -132,15 +132,14 @@
 
     if (offerFeatures.length) {
       uniquePins = uniquePins.filter(function (it) {
-        for (var j = 0; j < it.offer.features.length; j++) {
-          for (i = 0; i < offerFeatures.length; i++) {
-            return it.offer.features[j] === offerFeatures[i];
+        for (i = 0; i < offerFeatures.length; i++) {
+          if (it.offer.features.indexOf(offerFeatures[i]) === -1) {
+            return false;
           }
         }
-        return it.offer.features;
+        return it;
       });
     }
-
     window.clearPins();
     window.map.removeCard();
     window.renderPins(uniquePins, 5);
