@@ -33,8 +33,7 @@
     }
   });
 
-
-  fileChooser.addEventListener('change', function () {
+  var uploadFile = function () {
     var file = fileChooser.files[0];
     var fileName = file.name.toLowerCase();
 
@@ -51,7 +50,10 @@
 
       reader.readAsDataURL(file);
     }
-  });
+  };
+
+
+  fileChooser.addEventListener('change', uploadFile);
 
   var objectFileChooser = document.querySelector('.form__photo-container input[type=file]');
   var objectPreview = document.querySelector('.form__photo-container');
@@ -87,7 +89,7 @@
     }
   });
 
-  objectFileChooser.addEventListener('change', function () {
+  var uploadObjectFiles = function () {
     var file = objectFileChooser.files[0];
     var fileName = file.name.toLowerCase();
 
@@ -108,5 +110,8 @@
 
       reader.readAsDataURL(file);
     }
-  });
+  };
+
+  objectFileChooser.addEventListener('change', uploadObjectFiles);
+
 })();
