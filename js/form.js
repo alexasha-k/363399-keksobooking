@@ -13,9 +13,12 @@
   var formElementTimeout = document.querySelector('.form__element #timeout');
   var formElementRoomNumber = document.querySelector('.form__element #room_number');
   var formElementCapacity = document.querySelector('.form__element #capacity');
-  var minLengthValue = formElementTitle.minLength;
+
+  //  ms edge не понимает значение formElementTitle.minlength
+  var minLengthValue = formElementTitle.getAttribute('minlength');
 
   //  Валидация минимальный длины заголовка объявления для Edge
+
   formElementTitle.addEventListener('input', function (evt) {
     var target = evt.target;
     if (target.value.length < minLengthValue) {
@@ -90,40 +93,30 @@
   formElementCapacity.addEventListener('change', setRoomNumberCapacityValidity);
   formElementRoomNumber.addEventListener('change', setRoomNumberCapacityValidity);
 
-  //  Кнопка сброса полей формы и возврата метки в первоначальное состояние
+  // Функция сброса формы
+  var resetForm = function () {
+    noticeForm.reset();
+    window.resetAvatar();
+    window.clearDropZone();
+    window.clearPins();
+    window.closeMap();
+  };
+
+  //  Кнопка reset
   var resetButton = document.querySelector('.form__reset');
   resetButton.addEventListener('click', function (evt) {
     evt.preventDefault();
-    noticeForm.reset();
-    window.clearPins();
-    window.closeMap();
+    resetForm();
   });
 
+  // Кнопка отправки данных формы
   noticeForm.addEventListener('submit', function (evt) {
-    var body = document.querySelector('body');
-
     window.upload(new FormData(noticeForm), function () {
-      noticeForm.reset();
-      window.clearPins();
-      window.closeMap();
-
-      var responseMessage = document.createElement('div');
-      responseMessage.classList.add('response-message');
-      responseMessage.textContent = 'Вы успешно отправили объявление';
-      body.appendChild(responseMessage);
-      setTimeout(function () {
-        body.removeChild(responseMessage);
-      }, 3000);
-
+      window.showStatusMessage('Вы успешно отправили объявление');
     }, function (response) {
-      var responseMessage = document.createElement('div');
-      responseMessage.classList.add('response-message');
-      responseMessage.textContent = 'Ваше объявление не было отправлено(' + response + ')';
-      body.appendChild(responseMessage);
-      setTimeout(function () {
-        body.removeChild(responseMessage);
-      }, 3000);
+      window.showStatusMessage('Ваше объявление не было отправлено(' + response + ')');
     });
+    resetForm();
     evt.preventDefault();
   });
 

@@ -883,3 +883,8 @@ textarea:focus
   padding: 20px;
   text-align: center;
 }
+
+.features input:focus + label,
+input[type="file"]:focus + label {
+  box-shadow: 0 0 4px 1px #ff6547;
+}

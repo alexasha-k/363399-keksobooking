@@ -43,4 +43,5 @@
     map.appendChild(mapCardElement);
     mapCardElement.querySelector('.popup__close').addEventListener('click', window.map.removeCard);
   };
+
 })();

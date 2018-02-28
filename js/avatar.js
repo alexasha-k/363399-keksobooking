@@ -2,8 +2,14 @@
 
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var PREVIEW_AVATAR_DEFAULT_SRC = 'img/muffin.png';
+
   var fileChooser = document.querySelector('.upload input[type=file]');
   var preview = document.querySelector('.notice__preview img');
+
+  window.resetAvatar = function () {
+    preview.src = PREVIEW_AVATAR_DEFAULT_SRC;
+  };
 
   var dropZone = document.querySelector('.drop-zone');
   var draggedItem = null;
@@ -57,6 +63,13 @@
 
   var objectFileChooser = document.querySelector('.form__photo-container input[type=file]');
   var objectPreview = document.querySelector('.form__photo-container');
+
+  window.clearDropZone = function () {
+    var child = objectPreview.querySelectorAll('img');
+    for (var i = 0; i < child.length; i++) {
+      objectPreview.removeChild(child[i]);
+    }
+  };
 
   var objectDropZone = document.querySelector('.form__photo-container .drop-zone');
   objectDropZone.addEventListener('dragover', function (evt) {
