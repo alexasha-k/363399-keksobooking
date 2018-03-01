@@ -3,15 +3,14 @@
 // Модуль для перемещения меткт по карте
 (function () {
 
+  var MAIN_PIN_WIDTH = 65;
+  var MAIN_PIN_HEIGHT = 87;
   var map = document.querySelector('section.map');
   var mapPinMain = document.querySelector('.map__pin--main');
   var noticeFormAddress = document.querySelector('#address');
 
   window.getNewCoords = function (evt) {
     evt.preventDefault();
-
-    var MAIN_PIN_WIDTH = 65;
-    var MAIN_PIN_HEIGHT = 87;
 
     var startCoords = {
       x: evt.clientX,

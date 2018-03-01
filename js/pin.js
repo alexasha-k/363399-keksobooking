@@ -4,8 +4,8 @@
 
 (function () {
 
-  var mapBalloonTemplate = document.querySelector('#map-balloon-template').content;
   var PIN_HEIGHT = 70;
+  var mapBalloonTemplate = document.querySelector('#map-balloon-template').content;
 
   var onClickPin = function (obj) {
     return function (evt) {

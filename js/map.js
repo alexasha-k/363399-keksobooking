@@ -6,6 +6,7 @@
 
 (function () {
 
+  var ESCAPE_KEY = 27;
   var map = document.querySelector('section.map');
   var noticeForm = document.querySelector('.notice__form');
   var mapPinMain = document.querySelector('.map__pin--main');
@@ -24,7 +25,7 @@
       }
     },
     onEscKeydown: function (evt) {
-      if (evt.keyCode === 27) {
+      if (evt.keyCode === ESCAPE_KEY) {
         window.map.removeCard();
         window.map.disableActivePin();
         document.removeEventListener('keydown', window.map.onEscKeydown);
@@ -87,7 +88,8 @@
   //  Обработчики mousemove и mouseup должны добавляться только при вызове обработчика mousedown
   mapPinMain.addEventListener('mousedown', function (evt) {
     if (map.classList.contains('map--faded')) {
-      mapPinMain.addEventListener('mousemove', startMap);
+      startMap();
+      window.getNewCoords(evt);
     } else {
       window.getNewCoords(evt);
     }

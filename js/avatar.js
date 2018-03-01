@@ -36,6 +36,8 @@
       });
 
       reader.readAsDataURL(file);
+    } else {
+      window.showStatusMessage('Неверный формат файла');
     }
   });
 
@@ -99,6 +101,8 @@
       });
 
       reader.readAsDataURL(file);
+    } else {
+      window.showStatusMessage('Неверный формат файла');
     }
   });
 
