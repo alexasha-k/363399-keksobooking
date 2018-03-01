@@ -7,6 +7,9 @@
 (function () {
 
   var ESCAPE_KEY = 27;
+  var START_PIN_COORDS_Y = 375;
+  var START_PIN_COORDS_X = (window.outerWidth / 2);
+
   var map = document.querySelector('section.map');
   var noticeForm = document.querySelector('.notice__form');
   var mapPinMain = document.querySelector('.map__pin--main');
@@ -54,9 +57,9 @@
 
   toggleMapFiltersSelects(true);
 
-  // Устанавливаем начальное значение адрема
+  // Устанавливаем начальное значение адреса
   var noticeFormAddress = document.querySelector('#address');
-  noticeFormAddress.value = (window.outerWidth / 2) + ', 375';
+  noticeFormAddress.value = START_PIN_COORDS_X + ', ' + START_PIN_COORDS_Y;
 
   var startMap = function () {
     window.mapObjects = [];
@@ -69,7 +72,6 @@
     noticeForm.classList.remove('notice__form--disabled');
     toggleDisableElement();
     noticeFormAddress.readOnly = true;
-    noticeFormAddress.value = (window.outerWidth / 2) + ', 429.5';
     window.renderPins(window.mapObjects);
     mapPinMain.removeEventListener('mousemove', startMap);
   };
@@ -79,8 +81,8 @@
     map.classList.add('map--faded');
     noticeForm.classList.add('notice__form--disabled');
     toggleDisableElement(true);
-    noticeFormAddress.value = (window.outerWidth / 2) + ', 375';
-    mapPinMain.style.top = 375 + 'px';
+    noticeFormAddress.value = START_PIN_COORDS_X + ', ' + START_PIN_COORDS_Y;
+    mapPinMain.style.top = START_PIN_COORDS_Y + 'px';
     mapPinMain.style.left = 50 + '%';
     toggleMapFiltersSelects(true);
   };
