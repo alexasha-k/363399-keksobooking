@@ -3,12 +3,11 @@
 // Модуль для перемещения меткт по карте
 (function () {
 
-  var MAIN_PIN_WIDTH = 65;
   var MAIN_PIN_HEIGHT = 87;
   var RESTRICTION_COORDS_TOP = 150;
   var RESTRICTION_COORDS_BOTTOM = 500;
   var map = document.querySelector('section.map');
-  var mapPinMain = document.querySelector('.map__pin--main');
+  var mapPinMain = map.querySelector('.map__pin--main');
   var noticeFormAddress = document.querySelector('#address');
 
   window.getNewCoords = function (evt) {
@@ -25,12 +24,12 @@
     };
 
     var maxCoord = {
-      x: map.offsetLeft + map.offsetWidth - (MAIN_PIN_WIDTH / 2),
+      x: map.offsetWidth,
       y: RESTRICTION_COORDS_BOTTOM - (MAIN_PIN_HEIGHT / 2)
     };
 
     var minCoord = {
-      x: map.offsetLeft - (MAIN_PIN_WIDTH / 2),
+      x: 0,
       y: RESTRICTION_COORDS_TOP - (MAIN_PIN_HEIGHT / 2)
     };
 

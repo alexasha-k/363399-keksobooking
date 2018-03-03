@@ -3,6 +3,7 @@
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
   var PREVIEW_AVATAR_DEFAULT_SRC = 'img/muffin.png';
+  var FORM_IMAGE_HEIGHT = '70';
 
   var fileChooser = document.querySelector('.upload input[type=file]');
   var preview = document.querySelector('.notice__preview img');
@@ -39,6 +40,7 @@
     } else {
       window.showStatusMessage('Неверный формат файла');
     }
+
   });
 
   var uploadFile = function () {
@@ -94,7 +96,7 @@
 
       reader.addEventListener('load', function () {
         var newImg = document.createElement('img');
-        newImg.height = '70';
+        newImg.height = FORM_IMAGE_HEIGHT;
         newImg.src = reader.result;
 
         objectPreview.appendChild(newImg);
@@ -104,9 +106,10 @@
     } else {
       window.showStatusMessage('Неверный формат файла');
     }
+
   });
 
-  var uploadObjectFiles = function () {
+  var objectFileChooserChangeHandler = function () {
     var file = objectFileChooser.files[0];
     var fileName = file.name.toLowerCase();
 
@@ -119,7 +122,7 @@
 
       reader.addEventListener('load', function () {
         var newImg = document.createElement('img');
-        newImg.height = '70';
+        newImg.height = FORM_IMAGE_HEIGHT;
         newImg.src = reader.result;
 
         objectPreview.appendChild(newImg);
@@ -129,6 +132,6 @@
     }
   };
 
-  objectFileChooser.addEventListener('change', uploadObjectFiles);
+  objectFileChooser.addEventListener('change', objectFileChooserChangeHandler);
 
 })();

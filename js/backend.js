@@ -3,6 +3,7 @@
 (function () {
 
   var URL = 'https://js.dump.academy/keksobooking';
+  var DATA_URL = 'https://js.dump.academy/keksobooking/data';
   var STATUS_OK = 200;
   var LOAD_TIMEOUT = 10000;
 
@@ -22,7 +23,6 @@
     xhr.send(data);
   };
 
-  var DATA_URL = 'https://js.dump.academy/keksobooking/data';
   window.load = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';

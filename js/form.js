@@ -5,14 +5,21 @@
 (function () {
   //  Форма отправки данных
 
+  var MIN_PRICE_OF_TYPE = {
+    'bungalo': 0,
+    'flat': 1000,
+    'house': 5000,
+    'palace': 10000
+  };
+
   var noticeForm = document.querySelector('.notice__form');
-  var formElementTitle = document.querySelector('.form__element #title');
-  var formElementType = document.querySelector('.form__element #type');
-  var formElementPrice = document.querySelector('.form__element #price');
-  var formElementTimein = document.querySelector('.form__element #timein');
-  var formElementTimeout = document.querySelector('.form__element #timeout');
-  var formElementRoomNumber = document.querySelector('.form__element #room_number');
-  var formElementCapacity = document.querySelector('.form__element #capacity');
+  var formElementTitle = noticeForm.querySelector('.form__element #title');
+  var formElementType = noticeForm.querySelector('.form__element #type');
+  var formElementPrice = noticeForm.querySelector('.form__element #price');
+  var formElementTimein = noticeForm.querySelector('.form__element #timein');
+  var formElementTimeout = noticeForm.querySelector('.form__element #timeout');
+  var formElementRoomNumber = noticeForm.querySelector('.form__element #room_number');
+  var formElementCapacity = noticeForm.querySelector('.form__element #capacity');
 
   //  ms edge не понимает значение formElementTitle.minlength
   var minLengthValue = formElementTitle.getAttribute('minlength');
@@ -23,40 +30,26 @@
     var target = evt.target;
     if (target.value.length < minLengthValue) {
       target.setCustomValidity('Заголовок объявления должен состоять минимум из ' + minLengthValue + ' символов');
-    } else {
-      target.setCustomValidity('');
     }
+    target.setCustomValidity('');
   });
 
   //  Установить минимальную цену в зависимости от типа помещения
   formElementType.addEventListener('change', function (evt) {
     var target = evt.target;
-    switch (target.value) {
-      case 'bungalo':
-        formElementPrice.min = 0;
-        break;
-      case 'flat':
-        formElementPrice.min = 1000;
-        break;
-      case 'house':
-        formElementPrice.min = 5000;
-        break;
-      case 'palace':
-        formElementPrice.min = 10000;
-        break;
-      default: formElementPrice.min = 0;
-    }
+    formElementPrice.min = MIN_PRICE_OF_TYPE[target.value];
   });
 
   //  Валидация цены помещения и кастомное сообщение об ошибке
+
   formElementPrice.addEventListener('invalid', function () {
     if (formElementPrice.validity.rangeUnderflow) {
       formElementPrice.setCustomValidity('Для выбранного типа жилья минимальная стоимость составляет ' + formElementPrice.min);
     } else if (formElementPrice.validity.rangeOverflow) {
       formElementPrice.setCustomValidity('Максимальная стоимость составляет 1000000');
-    } else {
-      formElementPrice.setCustomValidity('');
     }
+
+    formElementPrice.setCustomValidity('');
   });
 
   //  Чтобы время заезда и выезда были одинаковыми
@@ -76,7 +69,7 @@
   //  Функция
   //  Пришлось с каждого инпута удалять setCustomValidity, чтобы при ошибке на одном элементе
   //  можно было менять другой для валидного значения
-  var setRoomNumberCapacityValidity = function (evt) {
+  var roomNumberCapacityChangeHandler = function (evt) {
     var target = evt.target;
     roomNumberValue = formElementRoomNumber.value;
     capacityValue = formElementCapacity.value;
@@ -90,8 +83,8 @@
     }
   };
 
-  formElementCapacity.addEventListener('change', setRoomNumberCapacityValidity);
-  formElementRoomNumber.addEventListener('change', setRoomNumberCapacityValidity);
+  formElementCapacity.addEventListener('change', roomNumberCapacityChangeHandler);
+  formElementRoomNumber.addEventListener('change', roomNumberCapacityChangeHandler);
 
   // Функция сброса формы
   var resetForm = function () {

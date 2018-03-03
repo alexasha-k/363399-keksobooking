@@ -4,14 +4,13 @@
 
 (function () {
 
+  var STATUS_MESSAGE_TIMEOUT = 3000;
+
   //  Перевод для вывода типа объектов
-  window.offerTypeRU = function (el) {
-    switch (el) {
-      case 'flat': return 'Квартира';
-      case 'bungalo': return 'Бунгало';
-      case 'house': return 'Дом';
-      default: return 'Другой тип';
-    }
+  window.offerTypeRU = {
+    'flat': 'Квартира',
+    'bungalo': 'Бунгало',
+    'house': 'Дом'
   };
 
   // Функция для вывода информационных сообщений
@@ -24,7 +23,7 @@
     body.appendChild(responseMessage);
     setTimeout(function () {
       body.removeChild(responseMessage);
-    }, 3000);
+    }, STATUS_MESSAGE_TIMEOUT);
   };
 
 })();

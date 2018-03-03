@@ -4,29 +4,37 @@
 
 (function () {
 
-  var offerType = document.querySelector('#housing-type').value;
-  var offerPrice = document.querySelector('#housing-price').value;
-  var offerRooms = document.querySelector('#housing-rooms').value;
-  var offerGuests = document.querySelector('#housing-guests').value;
+  var NUMBER_OF_PINS = 5;
+  var LOW_PRICE_MAX = 10000;
+  var HIGH_PRICE_MIN = 50000;
+  var noticeFormFilters = document.querySelector('.map__filters');
+  var offerTypeInput = noticeFormFilters.querySelector('#housing-type');
+  var offerType = offerTypeInput.value;
+  var offerPriceInput = noticeFormFilters.querySelector('#housing-price');
+  var offerPrice = offerPriceInput.value;
+  var offerRoomsInput = noticeFormFilters.querySelector('#housing-rooms');
+  var offerRooms = offerRoomsInput.value;
+  var offerGuestsInput = noticeFormFilters.querySelector('#housing-guests');
+  var offerGuests = offerGuestsInput.value;
   var offerFeatures = [];
 
-  document.querySelector('#housing-type').addEventListener('change', function () {
-    offerType = document.querySelector('#housing-type').value;
+  offerTypeInput.addEventListener('change', function () {
+    offerType = offerTypeInput.value;
     window.debounce(updatePins);
   });
 
-  document.querySelector('#housing-price').addEventListener('change', function () {
-    offerPrice = document.querySelector('#housing-price').value;
+  offerPriceInput.addEventListener('change', function () {
+    offerPrice = offerPriceInput.value;
     window.debounce(updatePins);
   });
 
-  document.querySelector('#housing-rooms').addEventListener('change', function () {
-    offerRooms = document.querySelector('#housing-rooms').value;
+  offerRoomsInput.addEventListener('change', function () {
+    offerRooms = offerRoomsInput.value;
     window.debounce(updatePins);
   });
 
-  document.querySelector('#housing-guests').addEventListener('change', function () {
-    offerGuests = document.querySelector('#housing-guests').value;
+  offerGuestsInput.addEventListener('change', function () {
+    offerGuests = offerGuestsInput.value;
     window.debounce(updatePins);
   });
 
@@ -75,9 +83,9 @@
     if (offerPrice !== 'any') {
       uniquePins = uniquePins.filter(function (it) {
         var simplePrice;
-        if (it.offer.price < 10000) {
+        if (it.offer.price < LOW_PRICE_MAX) {
           simplePrice = 'low';
-        } else if (it.offer.price > 50000) {
+        } else if (it.offer.price > HIGH_PRICE_MIN) {
           simplePrice = 'high';
         } else {
           simplePrice = 'middle';
@@ -98,7 +106,7 @@
     }
     window.clearPins();
     window.map.removeCard();
-    window.renderPins(uniquePins, 5);
+    window.renderPins(uniquePins, NUMBER_OF_PINS);
   };
 
 })();

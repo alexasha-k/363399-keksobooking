@@ -12,7 +12,7 @@
 
   var map = document.querySelector('section.map');
   var noticeForm = document.querySelector('.notice__form');
-  var mapPinMain = document.querySelector('.map__pin--main');
+  var mapPinMain = map.querySelector('.map__pin--main');
 
   window.map = {
     disableActivePin: function () {
@@ -83,7 +83,7 @@
     toggleDisableElement(true);
     noticeFormAddress.value = START_PIN_COORDS_X + ', ' + START_PIN_COORDS_Y;
     mapPinMain.style.top = START_PIN_COORDS_Y + 'px';
-    mapPinMain.style.left = 50 + '%';
+    mapPinMain.style.left = '';
     toggleMapFiltersSelects(true);
   };
 
@@ -92,9 +92,8 @@
     if (map.classList.contains('map--faded')) {
       startMap();
       window.getNewCoords(evt);
-    } else {
-      window.getNewCoords(evt);
     }
+    window.getNewCoords(evt);
   });
 
 })();
